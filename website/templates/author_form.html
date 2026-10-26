@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Add author' if mode == 'add' else 'Edit author' }}{% endblock %}
+{% block content %}
+<h1>{{ 'Add an author' if mode == 'add' else 'Edit author' }}</h1>
+<form method="post" enctype="multipart/form-data" novalidate data-form="author"
+      action="{{ url_for('author_add') if mode == 'add' else url_for('author_edit', author_id=form.author_id) }}">
+  <ul class="errors" role="alert">{% for e in errors %}<li>{{ e }}</li>{% endfor %}</ul>
+  <label>Name <input type="text" name="name" maxlength="100" value="{{ form.get('name', '') }}"></label>
+  <label>Country <input type="text" name="country" maxlength="50" value="{{ form.get('country', '') }}"></label>
+  <label>Photo (optional)
+    {% if current_image %}<span class="current"><img class="thumb round" src="{{ url_for('static', filename='uploads/' ~ current_image) }}" alt="Current photo"> Current photo. Choose a file only to replace it.</span>{% endif %}
+    <input type="file" name="photo" accept="image/png,image/jpeg,image/gif,image/webp">
+  </label>
+  <div class="form-actions">
+    <button type="submit" class="primary">{{ 'Add author' if mode == 'add' else 'Save changes' }}</button>
+    <a class="btn" href="{{ url_for('library') }}">Cancel</a>
+  </div>
+</form>
+{% endblock %}
